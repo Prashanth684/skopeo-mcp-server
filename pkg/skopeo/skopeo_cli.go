@@ -10,25 +10,26 @@ type skopeoCli struct {
 	filePath string
 }
 
+var architectures = []string{
+	"386",
+	"amd64",
+	"amd64p32",
+	"arm",
+	"arm64",
+	"loong64",
+	"mips",
+	"mipsle",
+	"mips64",
+	"mips64le",
+	"ppc64",
+	"ppc64le",
+	"riscv64",
+	"s390x",
+	"wasm",
+}
+
 // ValidArchitectures - list of all the valid architecture values in an image
 func (s *skopeoCli) ValidArchitectures() string {
-	architectures := []string{
-		"386",
-		"amd64",
-		"amd64p32",
-		"arm",
-		"arm64",
-		"loong64",
-		"mips",
-		"mipsle",
-		"mips64",
-		"mips64le",
-		"ppc64",
-		"ppc64le",
-		"riscv64",
-		"s390x",
-		"wasm",
-	}
 	return strings.Join(architectures, ", ")
 }
 
@@ -51,6 +52,19 @@ func (s *skopeoCli) ImageInspectWithOSOverride(name string, arch string) (string
 func (s *skopeoCli) exec(args ...string) (string, error) {
 	output, err := exec.Command(s.filePath, args...).CombinedOutput()
 	return string(output), err
+}
+
+// ImageInspectForAllArches displays the low-level information for all suppported architecture variants of the image
+func (s *skopeoCli) ImageInspectForAllArches(name string) ([]string, error) {
+	var archInfo []string
+	for _, arch := range architectures {
+		output, err := s.exec("inspect", "--no-tags", "--override-arch="+arch, "docker://"+name)
+		if err != nil {
+			return archInfo, err
+		}
+		archInfo = append(archInfo, output)
+	}
+	return archInfo, nil
 }
 
 func newSkopeoCli() (*skopeoCli, error) {
