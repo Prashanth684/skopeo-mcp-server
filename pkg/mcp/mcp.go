@@ -24,10 +24,7 @@ func NewSever() (*Server, error) {
 			server.WithLogging(),
 		),
 	}
-	var err error
-	if s.skopeo, err = skopeo.NewSkopeo(); err != nil {
-		return nil, err
-	}
+	s.skopeo = skopeo.NewSkopeo()
 	s.server.AddTools(slices.Concat(
 		s.initSkopeo(),
 	)...)

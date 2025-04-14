@@ -6,8 +6,6 @@ type Skopeo interface {
 	ValidArchitectures() string
 	// ImageInspect displays the low-level information for images identified by the ID or name
 	ImageInspect(name string) (string, error)
-	// ImageInspect displays the low-level information for images identified by the ID or name
-	ImageInspectWithTags(name string) (string, error)
 	// ImageInspectWithOSOverride displays the low-level information for the architecture variant of the images identified by the ID or name
 	ImageInspectWithOSOverride(name string, arch string) (string, error)
 	// ImageInspectForAllArches displays the low-level information for all suppported architecture variants of the image
@@ -16,6 +14,6 @@ type Skopeo interface {
 	//ImageCopy() (string, error)
 }
 
-func NewSkopeo() (Skopeo, error) {
-	return newSkopeoCli()
+func NewSkopeo() Skopeo {
+	return NewSkopeoLib()
 }

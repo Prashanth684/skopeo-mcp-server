@@ -15,10 +15,6 @@ func (s *Server) initSkopeo() []server.ServerTool {
 			mcp.WithDescription("Displays low level information about a container image, an oci image or an oci archive"),
 			mcp.WithString("imageURL", mcp.Description("The pull spec of an image or a path to an oci layout or an oci archive"), mcp.Required()),
 		), s.imageInspect},
-		{mcp.NewTool("image_inspect_with_tags",
-			mcp.WithDescription("Displays low level information about a container image, an oci image or an oci archive.It includes repo tags information as well which might be slow"),
-			mcp.WithString("imageURL", mcp.Description("The pull spec of an image or a path to an oci layout or an oci archive"), mcp.Required()),
-		), s.imageInspectWithTags},
 		{mcp.NewTool("image_inspect_architectures",
 			//mcp.WithDescription("This checks if an image of that particular os and architecture exists. If so, it returns the data of that image"),
 			mcp.WithDescription("Check which architectures are supported by the given image from the list of valid architectures through the valid_architectures tool. Check for amd64, arm64, ppc64le and s390x only unless user explicitly asks for other architectures which are supported. If the user does not, prompt to ask if other architectures need to be checked and if so, check all of them."),
@@ -30,10 +26,6 @@ func (s *Server) initSkopeo() []server.ServerTool {
 
 func (s *Server) imageInspect(_ context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	return NewTextResult(s.skopeo.ImageInspect(ctr.Params.Arguments["imageURL"].(string))), nil
-}
-
-func (s *Server) imageInspectWithTags(_ context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	return NewTextResult(s.skopeo.ImageInspectWithTags(ctr.Params.Arguments["imageURL"].(string))), nil
 }
 
 func (s *Server) imageInspectWithOSOverride(_ context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
