@@ -22,7 +22,7 @@ func (s *Server) initSkopeo() []server.ServerTool {
 			mcp.WithString("arch", mcp.Description("The architecture to check for to see if an image manifest matching the architecture is present"), mcp.Required()),
 		), s.imageInspectWithOSOverride},
 		{mcp.NewTool("image_inspect_architectures",
-			mcp.WithDescription("Check if multiple architectures are supported by the given image. If the user does not explicitly specify which architectures to check for, then check for amd64, arm64, ppc64le and s390x only. If the user asks to check for all architectures, then check for all the architectures available through the valid_architectures tool."),
+			mcp.WithDescription("Check if multiple architectures are supported by the given image. Check for most common architectures - amd64, arm64, ppc64le and s390x if not specified."),
 			mcp.WithString("imageURL", mcp.Description("The pull spec of an image or a path to an oci layout or an oci archive"), mcp.Required()),
 			mcp.WithArray("architectures", mcp.Description("The architectures to check for to see if an image manifest matching the architecture is present. "+
 				`Example: ["amd64", "arm64", "ppc64le", "s390x"]`),
