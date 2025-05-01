@@ -8,8 +8,8 @@ type Skopeo interface {
 	ImageInspect(name string) (string, error)
 	// ImageInspectWithOSOverride displays the low-level information for the architecture variant of the images identified by the ID or name
 	ImageInspectWithOSOverride(name string, arch string) (string, error)
-	// ImageInspectForAllArches displays the low-level information for all suppported architecture variants of the image
-	ImageInspectForAllArches(name string) ([]string, error)
+	// ImageInspectForArches displays the low-level information for all suppported architecture variants of the image
+	ImageInspectForArches(name string, arches []string) (string, error)
 	// ImageCopy copies all the manifests of the image to a registry or ociarchive
 	//ImageCopy() (string, error)
 }

@@ -36,16 +36,16 @@ func (s *skopeoLib) ImageInspectWithOSOverride(name, arch string) (string, error
 }
 
 // ImageInspectForAllArches displays the low-level information for all suppported architecture variants of the image
-func (s *skopeoLib) ImageInspectForAllArches(name string) ([]string, error) {
+func (s *skopeoLib) ImageInspectForArches(name string, arches []string) (string, error) {
 	var results []string
-	for _, arch := range architectures {
+	for _, arch := range arches {
 		result, err := inspectImage(name, arch)
 		if err != nil {
-			return results, err
+			return "", err
 		}
 		results = append(results, result)
 	}
-	return results, nil
+	return strings.Join(results, " "), nil
 }
 
 // inspectImage inspects the image and gets the metadata and other info of the image
@@ -77,6 +77,11 @@ func inspectImage(name, arch string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("inspect failed: %w", err)
 	}
+
+	// Remove tag info by clearing Tag field (or omit displaying it)
+	inspectInfo.LayersData = nil
+	inspectInfo.Layers = nil
+	inspectInfo.Labels = nil
 
 	data, err := json.MarshalIndent(inspectInfo, "", "  ")
 	if err != nil {
